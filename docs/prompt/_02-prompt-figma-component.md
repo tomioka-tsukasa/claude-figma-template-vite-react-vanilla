@@ -3,8 +3,8 @@ Figmaで選択中のコンポーネント一覧を実装してください。
 ## 手順
 
 1. `/CLAUDE.md` を読んでプロジェクトの基本情報を把握
-2. `/docs/figma-guide/figma-common-guide.md` を読んで共通要件を把握
-3. `/docs/figma-guide/figma-component-guide.md` を読んでコンポーネント固有要件を把握
+2. `/docs/guide/figma-common-guide.md` を読んで共通要件を把握
+3. `/docs/guide/figma-component-guide.md` を読んでコンポーネント固有要件を把握
 4. `/docs/responsive-style-guide.md` を読んでレスポンシブの書き方を把握
 5. 最後に実装したコンポーネントを読み込んでサンプルを確認できるページを生成してください
 
