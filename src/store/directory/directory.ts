@@ -4,21 +4,11 @@ export const BASE_ROOT = '/'
 
 export const SLUGS = {
   TOP: 'top',
-  MORI_CORP_TEST_01: 'mori-corp-test-01',
-  MORI_CORP_TEST_02: 'mori-corp-test-02',
-  MORI_CORP_TEST_03: 'mori-corp-test-03',
-  MORI_CORP_TEST_04: 'mori-corp-test-04',
-  MORI_CORP_TEST_05: 'mori-corp-test-05',
   FIGMA_COMPONENTS: 'figma-components',
 } as const
 
 export const DM = {
   TOP: ROOT,
-  MORI_CORP_TEST_01: `${ROOT}${SLUGS.MORI_CORP_TEST_01}`,
-  MORI_CORP_TEST_02: `${ROOT}${SLUGS.MORI_CORP_TEST_02}`,
-  MORI_CORP_TEST_03: `${ROOT}${SLUGS.MORI_CORP_TEST_03}`,
-  MORI_CORP_TEST_04: `${ROOT}${SLUGS.MORI_CORP_TEST_04}`,
-  MORI_CORP_TEST_05: `${ROOT}${SLUGS.MORI_CORP_TEST_05}`,
   FIGMA_COMPONENTS: `${ROOT}${SLUGS.FIGMA_COMPONENTS}`,
 } as const
 
