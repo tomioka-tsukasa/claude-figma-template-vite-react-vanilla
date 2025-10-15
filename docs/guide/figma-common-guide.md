@@ -90,6 +90,27 @@ export const paragraph = style([
 ])
 ```
 
+#### line-height の特別な処理
+
+**重要**: `line-height` は `rvw()` を使用せず、Figmaの数値を倍率に計算し直して指定する
+
+```typescript
+// ❌ 間違い
+export const text = style([
+  rvw.lineHeight(2.1, 2.1), // NG: rvwは使わない
+])
+
+// ✅ 正しい
+export const text = style([
+  {
+    lineHeight: 1.5, // 倍率で指定（単位なし）
+  },
+  rvw.fontSize(16, 14),
+])
+```
+
+**計算方法**: Figmaで `line-height: 32px` `font-size: 16px` が指定されていたら `line-height / font-size = 2.0` のように計算。
+
 #### 禁止パターン
 ```typescript
 // HTMLタグセレクターは使用禁止
