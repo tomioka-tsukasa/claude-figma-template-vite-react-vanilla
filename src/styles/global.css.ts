@@ -1,12 +1,6 @@
-import { globalStyle } from '@vanilla-extract/css'
-import { colors, notoSans } from './variables'
-
-// リセットCSS
-globalStyle('*', {
-  margin: 0,
-  padding: 0,
-  boxSizing: 'border-box',
-})
+import {  globalStyle } from '@vanilla-extract/css'
+import { colors } from './variables'
+import { zenOldMincho } from './fontUtils'
 
 globalStyle('html', {
   fontSize: '62.5%', // 10px = 1rem
@@ -15,9 +9,9 @@ globalStyle('html', {
 
 globalStyle('body', {
   fontSize: '1.6rem',
-  color: colors.text.sample,
+  color: colors.base.black,
   backgroundColor: colors.base.bg,
-  ...notoSans()
+  ...zenOldMincho()
 })
 
 globalStyle('article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section', {
@@ -50,6 +44,6 @@ globalStyle('button, input, select, textarea', {
 
 globalStyle('img', {
   maxWidth: '100%',
+  width: '100%',
   height: 'auto',
-  verticalAlign: 'bottom',
 })

@@ -1,13 +1,14 @@
 import { StyleRule } from '@vanilla-extract/css'
 import { Properties } from 'csstype'
-import { PcDesignWidth, SpDesignWidth, PcMqWidthMin, PcOverMqWidthMin, TabletMqWidthMin, SpMqWidth, usePixelLimit, pixelLimitWidth, TabletDesignWidth } from './responsive.config'
+import { PcDesignWidth, SpDesignWidth, PcMqWidthMax, TabletMqWidthMax, SpMqWidthMax, usePixelLimit, pixelLimitWidth, TabletDesignWidth } from './responsive.config'
 
 // メディアクエリ定義
 export const mediaQueries = {
-  sp: `screen and (max-width: ${SpMqWidth}px)`,
-  tablet: `screen and (min-width: ${TabletMqWidthMin}px) and (max-width: ${PcMqWidthMin - 1}px)`,
-  pc: `screen and (min-width: ${PcMqWidthMin}px) and (max-width: ${PcOverMqWidthMin - 1}px)`,
-  pcOver: `screen and (min-width: ${PcOverMqWidthMin}px)`,
+  sp: `screen and (max-width: ${TabletMqWidthMax - 1}px)`,
+  spOnly: `screen and (max-width: ${SpMqWidthMax}px)`,
+  tablet: `screen and (min-width: ${SpMqWidthMax + 1}px) and (max-width: ${TabletMqWidthMax}px)`,
+  pc: `screen and (min-width: ${TabletMqWidthMax + 1}px) and (max-width: ${PcMqWidthMax}px)`,
+  pcOver: `screen and (min-width: ${PcMqWidthMax + 1}px)`,
   hover: '(hover: hover)',
   pixelBreakpoint: `screen and (min-width: ${pixelLimitWidth}px)`,
 }
@@ -99,7 +100,7 @@ const createResponsiveStyle = (
   const result: StyleRule = {
     [property]: defaultStr,
     '@media': {
-      [mediaQueries.sp]: {
+      [mediaQueries.spOnly]: {
         [property]: spStr,
       },
       [mediaQueries.tablet]: {
@@ -142,7 +143,7 @@ const createMqStyle = (
   if (!result['@media']) result['@media'] = {}
 
   if (spValue !== undefined) {
-    result['@media'][mediaQueries.sp] = {
+    result['@media'][mediaQueries.spOnly] = {
       [property]: spValue
     }
   }
@@ -187,26 +188,88 @@ export const mqStyle = new Proxy({} as Record<CSSProperty, (values: (string | nu
   }
 })
 
+// スタイルを統合する関数
+const mergeStyles = (styles: StyleRule | StyleRule[]): StyleRule => {
+  if (Array.isArray(styles)) {
+    return styles.reduce((acc, style) => {
+      Object.keys(style).forEach(key => {
+        if (key === '@media') {
+          if (!acc['@media']) acc['@media'] = {}
+
+          Object.assign(acc['@media'], style['@media'])
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (acc as any)[key] = (style as any)[key]
+        }
+      })
+
+      return acc
+    }, {} as StyleRule)
+  }
+
+  return styles
+}
+
 // メディアクエリユーティリティ
 // PC向けスタイル
-export const pc = (styles: StyleRule): StyleRule => ({
-  '@media': { [mediaQueries.pc]: styles }
-})
+export const pc = (styles: StyleRule | StyleRule[]): StyleRule => {
+  const mergedStyles = mergeStyles(styles)
+  const { '@media': mediaStyles, ...mainStyles } = mergedStyles
+
+  // @media内にpcの設定があればmainStylesとマージ、なければmainStylesのみ使用
+  const pcStyles = mediaStyles?.[mediaQueries.pc]
+    ? { ...mainStyles, ...mediaStyles[mediaQueries.pc] }
+    : mainStyles
+
+  return {
+    '@media': { [mediaQueries.pc]: pcStyles }
+  }
+}
 
 // PC-Over向けスタイル
-export const pcOver = (styles: StyleRule): StyleRule => ({
-  '@media': { [mediaQueries.pcOver]: styles }
-})
+export const pcOver = (styles: StyleRule | StyleRule[]): StyleRule => {
+  const mergedStyles = mergeStyles(styles)
+  const { '@media': mediaStyles, ...mainStyles } = mergedStyles
+
+  // @media内にpcOverの設定があればmainStylesとマージ、なければmainStylesのみ使用
+  const pcOverStyles = mediaStyles?.[mediaQueries.pcOver]
+    ? { ...mainStyles, ...mediaStyles[mediaQueries.pcOver] }
+    : mainStyles
+
+  return {
+    '@media': { [mediaQueries.pcOver]: pcOverStyles }
+  }
+}
 
 // SP向けスタイル
-export const sp = (styles: StyleRule): StyleRule => ({
-  '@media': { [mediaQueries.sp]: styles }
-})
+export const sp = (styles: StyleRule | StyleRule[]): StyleRule => {
+  const mergedStyles = mergeStyles(styles)
+  const { '@media': mediaStyles, ...mainStyles } = mergedStyles
+
+  // @media内にspOnlyの設定があればmainStylesとマージ、なければmainStylesのみ使用
+  const spStyles = mediaStyles?.[mediaQueries.spOnly]
+    ? { ...mainStyles, ...mediaStyles[mediaQueries.spOnly] }
+    : mainStyles
+
+  return {
+    '@media': { [mediaQueries.spOnly]: spStyles }
+  }
+}
 
 // タブレット向けスタイル
-export const tablet = (styles: StyleRule): StyleRule => ({
-  '@media': { [mediaQueries.tablet]: styles }
-})
+export const tablet = (styles: StyleRule | StyleRule[]): StyleRule => {
+  const mergedStyles = mergeStyles(styles)
+  const { '@media': mediaStyles, ...mainStyles } = mergedStyles
+
+  // @media内にtabletの設定があればmainStylesとマージ、なければmainStylesのみ使用
+  const tabletStyles = mediaStyles?.[mediaQueries.tablet]
+    ? { ...mainStyles, ...mediaStyles[mediaQueries.tablet] }
+    : mainStyles
+
+  return {
+    '@media': { [mediaQueries.tablet]: tabletStyles }
+  }
+}
 
 // ピクセルリミット向けスタイル
 export const pixelBreakpoint = (styles: StyleRule): StyleRule => ({

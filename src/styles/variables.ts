@@ -1,12 +1,11 @@
 export {
   PcDesignWidth,
+  PcDesignHeight,
   TabletDesignWidth,
   SpDesignWidth,
-  PcMqWidthMin,
   PcMqWidthMax,
-  PcOverMqWidthMin,
-  TabletMqWidthMin,
-  SpMqWidth,
+  TabletMqWidthMax,
+  SpMqWidthMax,
   usePixelLimit,
   pixelLimitWidth,
 } from './responsive.config'
@@ -17,19 +16,13 @@ export {
 
 export const colors = {
   main: {
-    sample: '#000000',
+    test: 'red'
   },
   base: {
     white: '#ffffff',
     black: '#000000',
-    gray: '#f0f0f0',
-    bg: '#f0f0f0',
-  },
-  sub: {
-    sample: '#ee8e47',
-  },
-  text: {
-    sample: '#5f5f5f',
+    gray: '#d7d7d7',
+    bg: '#ffffff',
   },
 }
 
@@ -37,4 +30,4 @@ export const colors = {
  * フォント定義
  */
 
-export { basicFontStyle, notoSansStyle, notoSans, type SetFontFamily } from './fontUtils'
+export { basicFontStyle, zenOldMinchoStyle, type SetFontFamily } from './fontUtils'
