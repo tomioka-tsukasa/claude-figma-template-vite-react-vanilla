@@ -75,7 +75,7 @@ export default function Component({ title, description }: ComponentProps) {
 #### 数値のレスポンシブ化
 
 - 基本的に `px` の固定値ではなく `rvw()` を使用
-- 詳細なガイドは @docs/responsive-style-guide.md を参照
+- 詳細なガイドは @docs/guide/responsive-style-guide.md を参照
 ```typescript
 import { style } from '@vanilla-extract/css'
 import { rvw } from '@/styles/responsive.css'
